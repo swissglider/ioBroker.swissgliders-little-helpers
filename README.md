@@ -1,4 +1,4 @@
-### WORKINPROGRESS
+### __WORK IN PROGRESS__
 ![Logo](admin/swissgliders-little-helpers.png)
 # ioBroker.swissgliders-little-helpers
 
