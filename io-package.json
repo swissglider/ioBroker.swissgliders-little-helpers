@@ -53,14 +53,8 @@
             "pl": "Oto kilka narzędzi do adapterów Swissglider i nie tylko.",
             "zh-cn": "这是Swissglider适配器的一些工具，等等。"
         },
-        "authors": [
-            "Swissglider <npm@swissglider.com>"
-        ],
-        "keywords": [
-            "helper",
-            "swissglider",
-            "tools"
-        ],
+        "authors": ["Swissglider <npm@swissglider.com>"],
+        "keywords": ["helper", "swissglider", "tools"],
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
@@ -85,7 +79,17 @@
     },
     "native": {
         "option1": true,
-        "option2": "42"
+        "option2": "42",
+        "send_to_command": {
+            "buttonName": { "en": "Send to pushover", "de": "Sende an Pushover" },
+            "instance": "pushover.0",
+            "command": "pushover",
+            "message": {
+                "message": "message",
+                "title": "Test",
+                "priority": 1
+            }
+        }
     },
     "objects": [],
     "instanceObjects": []
