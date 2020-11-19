@@ -1,4 +1,4 @@
-### __WORK IN PROGRESS__
+### 0.0.2-0 (2020-11-19)
 ![Logo](admin/swissgliders-little-helpers.png)
 # ioBroker.swissgliders-little-helpers
 
