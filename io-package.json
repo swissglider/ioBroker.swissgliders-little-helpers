@@ -1,0 +1,72 @@
+{
+    "common": {
+        "name": "swissgliders-little-helpers",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Swissglider's little helpers",
+        "titleLang": {
+            "en": "Swissglider's little helpers",
+            "de": "Die kleinen Helfer von Swissglider",
+            "ru": "Маленькие помощники Swissglider",
+            "pt": "Ajudantes de Swissglider",
+            "nl": "De kleine helpers van Swissglider",
+            "fr": "Les petits assistants de Swissglider",
+            "it": "I piccoli aiutanti di Swissglider",
+            "es": "Pequeños ayudantes de Swissglider",
+            "pl": "Mali pomocnicy Swissglidera",
+            "zh-cn": "Swissglider的小帮手"
+        },
+        "desc": {
+            "en": "This are some tools for Swissglider Adapters and more..",
+            "de": "Dies sind einige Tools für Swissglider Adapter und mehr.",
+            "ru": "Это некоторые инструменты для адаптеров Swissglider и многое другое ..",
+            "pt": "Estas são algumas ferramentas para adaptadores Swissglider e muito mais.",
+            "nl": "Dit zijn enkele tools voor Swissglider Adapters en meer ..",
+            "fr": "Voici quelques outils pour les adaptateurs Swissglider et plus encore.",
+            "it": "Questi sono alcuni strumenti per gli adattatori Swissglider e altro ancora ..",
+            "es": "Estas son algunas herramientas para adaptadores Swissglider y más.",
+            "pl": "Oto kilka narzędzi do adapterów Swissglider i nie tylko.",
+            "zh-cn": "这是Swissglider适配器的一些工具，等等。"
+        },
+        "authors": ["Swissglider <npm@swissglider.com>"],
+        "keywords": ["helper", "swissglider", "tools"],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "swissgliders-little-helpers.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/swissglider/ioBroker.swissgliders-little-helpers/master/admin/swissgliders-little-helpers.png",
+        "readme": "https://github.com/swissglider/ioBroker.swissgliders-little-helpers/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "general",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ]
+    },
+    "native": {
+        "option1": true,
+        "option2": "42"
+    },
+    "objects": [],
+    "instanceObjects": []
+}
