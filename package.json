@@ -18,6 +18,7 @@
     "url": "https://github.com/swissglider/ioBroker.swissgliders-little-helpers"
   },
   "dependencies": {
+    "influx": "^5.6.3",
     "@iobroker/adapter-core": "^2.4.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 /* You can delete those if you want. I just found them very helpful */
 * {
-    box-sizing: border-box
+    box-sizing: border-box;
 }
 .m {
     /* Don't cut off dropdowns! */
@@ -30,3 +30,7 @@ label > i[title] {
 }
 
 /* Add your styles here */
+.btn {
+    margin-top: 1em;
+    margin-right: 1em;
+}

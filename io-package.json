@@ -65,14 +65,8 @@
             "pl": "Oto kilka narzędzi do adapterów Swissglider i nie tylko.",
             "zh-cn": "这是Swissglider适配器的一些工具，等等。"
         },
-        "authors": [
-            "Swissglider <npm@swissglider.com>"
-        ],
-        "keywords": [
-            "helper",
-            "swissglider",
-            "tools"
-        ],
+        "authors": ["Swissglider <npm@swissglider.com>"],
+        "keywords": ["helper", "swissglider", "tools"],
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
@@ -98,19 +92,77 @@
     "native": {
         "option1": true,
         "option2": "42",
-        "send_to_command": {
-            "buttonName": {
-                "en": "Send to pushover",
-                "de": "Sende an Pushover"
+        "send_to_command": [
+            {
+                "buttonName": "Download Enum Configuration (JSON)",
+                "group": "Enum Handling",
+                "icon": "file_download",
+                "button_color": "green",
+                "instanceName": "",
+                "command": "getEnumConfiguration",
+                "message": {}
             },
-            "instance": "pushover.0",
-            "command": "pushover",
-            "message": {
-                "message": "message",
-                "title": "Test",
-                "priority": 1
+            {
+                "buttonName": "Overwritte all enums from JSON-File",
+                "group": "Enum Handling",
+                "icon": "file_upload",
+                "inputType": "file",
+                "button_color": "orange",
+                "instanceName": "",
+                "command": "overwritteAllEnums",
+                "message": {
+                    "types": ["channel", "device", "meta", "state"]
+                }
+            },
+            {
+                "buttonName": "Delete all Enums",
+                "group": "Enum Handling",
+                "icon": "delete_forever",
+                "button_color": "red",
+                "instanceName": "",
+                "command": "deleteAllEnums",
+                "message": {}
+            },
+            {
+                "buttonName": "Delete all Swissglider Elements",
+                "group": "Swissglider",
+                "icon": "delete_forever",
+                "button_color": "orange",
+                "instanceName": "",
+                "command": "deleteNativeElements",
+                "message": {
+                    "types": ["channel", "device", "meta", "state", "enum"],
+                    "entries": ["swissglider"]
+                }
+            },
+            {
+                "buttonName": "Stop Listening for creating General Parameter",
+                "group": "NativeSGGeneralParameterHelper",
+                "icon": "pan_tool",
+                "button_color": "brown",
+                "instanceName": "",
+                "command": "stopListeningToAll",
+                "message": {}
+            },
+            {
+                "buttonName": "Start Listening for creating General Parameter",
+                "group": "NativeSGGeneralParameterHelper",
+                "icon": "pan_tool",
+                "button_color": "brown",
+                "instanceName": "",
+                "command": "startListeningToAll",
+                "message": {}
+            },
+            {
+                "buttonName": "Writting all General Parameter",
+                "group": "NativeSGGeneralParameterHelper",
+                "icon": "pan_tool",
+                "button_color": "brown",
+                "instanceName": "",
+                "command": "writtingAllGeneralparameter",
+                "message": {}
             }
-        }
+        ]
     },
     "objects": [],
     "instanceObjects": []

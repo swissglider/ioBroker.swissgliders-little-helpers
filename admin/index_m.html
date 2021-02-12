@@ -1,6 +1,7 @@
 <html>
     <head>
         <!-- Load ioBroker scripts and styles-->
+        <link rel="stylesheet" type="text/css" href="../../lib/css/fancytree/ui.fancytree.min.css" />
         <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
         <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css" />
 
@@ -9,6 +10,10 @@
 
         <script type="text/javascript" src="../../js/translate.js"></script>
         <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+        <script type="text/javascript" src="../../lib/js/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="../../lib/js/jquery.fancytree-all.min.js"></script>
+
+        <script type="text/javascript" src="../../lib/js/selectID.js"></script>
         <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
         <!-- Load our own files -->
@@ -16,6 +21,7 @@
         <script type="text/javascript" src="words.js"></script>
 
         <script type="text/javascript">
+            var GLOBAL_SETTING;
             // This will be called by the admin adapter when the settings page loads
             function load(settings, onChange) {
                 // example: select elements with id=key and class=value and insert value
@@ -33,6 +39,77 @@
                             .on('keyup', () => onChange());
                     }
                 });
+                GLOBAL_SETTING = settings;
+
+                // create all the buttons from the configuration
+                var send_to_command = GLOBAL_SETTING['send_to_command'];
+                var grouped = {};
+                send_to_command.forEach((element) => {
+                    var groupName =
+                        'group' in element &&
+                        element.group &&
+                        element.group !== undefined &&
+                        typeof element.group === 'string' &&
+                        element.group !== ''
+                            ? element.group
+                            : 'empty Group';
+                    if (!(groupName in grouped && Array.isArray(grouped[groupName]))) {
+                        grouped[groupName] = [];
+                    }
+                    grouped[groupName].push(element);
+                });
+
+                for (const [key, value] of Object.entries(grouped)) {
+                    var jsKey = key.replace(' ', '_');
+                    $('.button-containters').append(`
+                        <div class="row">
+                            <div class="col s12 m12">
+                                <div class="card blue-grey lighten-5">
+                                    <div class="card-content black-text">
+                                        <span class="card-title">${key}</span>
+                                        <div id="${jsKey}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    value.forEach((element) => {
+                        var icon = '';
+                        if ('icon' in element && element.icon !== '') {
+                            icon = `<i class="material-icons left">${element.icon}</i>`;
+                        }
+                        if (!('inputType' in element)) {
+                            $('#' + jsKey).append(`
+                            <a class="btn ${element.button_color}" onclick="sendMessage('${element.buttonName}')">
+                                ${icon}
+                                <span>${element.buttonName}</span>
+                            </a>
+                        `);
+                        } else if (element.inputType && element.inputType !== null && element.inputType !== undefined) {
+                            if (element.inputType === 'file') {
+                                $('#' + jsKey).append(`
+                                <a
+                                    class="btn ${element.button_color}"
+                                    onclick="document.getElementById('fileInput_${element.buttonName}').click();"
+                                >
+                                    ${icon}
+                                    <span>${element.buttonName}</span>
+                                </a>
+                                <input
+                                    type="file"
+                                    accept="text/json"
+                                    id="fileInput_${element.buttonName}"
+                                    style="display: none"
+                                    onchange='onChooseFileJsonEnums(event, onFileLoadJsonEnums.bind(this,
+                                        "${element.buttonName}"))'
+                                />
+                            `);
+                            }
+                        }
+                    });
+                }
+
                 onChange(false);
                 // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
                 if (M) M.updateTextFields();
@@ -53,21 +130,90 @@
                 callback(obj);
             }
 
-            function sendMessage() {
-                sendTo(
-                    'pushover.0',
-                    'pushover',
-                    {
-                        message: 'message',
-                        title: 'Test',
-                        priority: 1,
-                    },
-                    (message) => {
-                        console.log(message);
-                        showMessage(message, 'test title');
-                    },
-                );
+            function onFileLoadJsonEnums(elementId, event) {
+                sendMessage(elementId, event.target.result);
             }
+
+            function onChooseFileJsonEnums(event, onLoadFileHandler) {
+                if (typeof window.FileReader !== 'function') throw "The file API isn't supported on this browser.";
+                let input = event.target;
+                if (!input) throw 'The browser does not properly implement the event object';
+                if (!input.files) throw 'This browser does not support the `files` property of the file input.';
+                if (!input.files[0]) return undefined;
+                let file = input.files[0];
+                let fr = new FileReader();
+                fr.onload = onLoadFileHandler;
+                fr.readAsText(file);
+            }
+
+            function sendMessage(buttonName, additionText = undefined) {
+                var buttonValues = GLOBAL_SETTING['send_to_command'].find((value) => value.buttonName === buttonName);
+                if (buttonValues) {
+                    var message = {
+                        instanceName: buttonValues.instanceName,
+                        message: buttonValues.message,
+                    };
+                    if ('command' in buttonValues) {
+                        message['command'] = buttonValues.command;
+                    }
+                    if (additionText && additionText !== null && additionText !== undefined) {
+                        message.additionText = additionText;
+                    }
+                    sendTo(null, 'general', message, (message) => {
+                        if (
+                            'error' in message &&
+                            message.error &&
+                            message.error !== null &&
+                            message.error !== undefined
+                        ) {
+                            console.error(message);
+                            const m_icon = 'icon' in message && message.icon !== '' ? message.icon : 'error';
+                            showMessage('<hr><pre>' + message.error + '</pre>', message.title, m_icon);
+                        } else if (
+                            'toJSONFile' in message &&
+                            message.toJSONFile &&
+                            message.toJSONFile !== null &&
+                            message.toJSONFile !== undefined
+                        ) {
+                            if ('message' in message && message.message !== '') {
+                                console.log(message);
+                                const m_icon =
+                                    'icon' in message && message.icon !== '' ? message.icon : 'file_download';
+                                showMessage('<hr><pre>' + message.message + '</pre>', message.title, m_icon);
+                            }
+                            let filename = 'result.json';
+                            if (
+                                'fileName' in message &&
+                                message.fileName &&
+                                message.fileName !== null &&
+                                message.fileName !== undefined &&
+                                typeof message.fileName === 'string'
+                            ) {
+                                filename = message.fileName;
+                            }
+                            var dataStr =
+                                'data:text/json;charset=utf-8,' +
+                                encodeURIComponent(JSON.stringify(message.toJSONFile, undefined, 4));
+                            var dlAnchorElem = document.getElementById('downloadAnchorElem');
+                            dlAnchorElem.setAttribute('href', dataStr);
+                            dlAnchorElem.setAttribute('download', filename);
+                            // dlAnchorElem.click();
+                            dlAnchorElem.click(function () {
+                                document.execCommand('SaveAs', '1', 'give img location here');
+                            });
+                        } else {
+                            console.log(message);
+                            const m_icon = 'icon' in message && message.icon !== '' ? message.icon : 'message';
+                            showMessage('<hr><pre>' + message.message + '</pre>', message.title, m_icon);
+                        }
+                    });
+                }
+            }
+
+            $(document).ready(function () {
+                // $('.modal').modal();
+                // $('.tooltipped').tooltip();
+            });
         </script>
     </head>
 
@@ -78,11 +224,9 @@
                     <img src="swissgliders-little-helpers.png" class="logo" />
                 </div>
             </div>
-
-            <a class="waves-effect waves-light btn-small" onclick="sendMessage()">
-                <i class="material-icons left">sendMessage</i>
-                <span class="translate">sendMessage</span>
-            </a>
+            <div class="button-containters">
+                <a id="downloadAnchorElem" style="display: none"></a>
+            </div>
         </div>
     </body>
 </html>
