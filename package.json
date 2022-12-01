@@ -47,7 +47,7 @@
     "rimraf": "^3.0.2",
     "sinon": "^9.2.1",
     "sinon-chai": "^3.5.0",
-    "source-map-support": "^0.5.19",
+    "source-map-support": "^0.5.21",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5",
     "@alcalzone/release-script": "^1.7.0"
